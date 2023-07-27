@@ -35,13 +35,10 @@ public class Game {
     private int copiesAvailable;
 
     @Column(name = "category")
-    private Category category;
+    private String category;
 
     @Column(name = "players")
     private String players;
-
-    @Column(name = "rating")
-    private int rating;
 
     @Column(name = "playing_time")
     private String playingTime;
