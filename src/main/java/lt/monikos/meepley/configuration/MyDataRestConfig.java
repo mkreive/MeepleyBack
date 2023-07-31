@@ -1,6 +1,7 @@
 package lt.monikos.meepley.configuration;
 
 import lt.monikos.meepley.entity.Game;
+import lt.monikos.meepley.entity.Review;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -20,8 +21,11 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
                 HttpMethod.PUT};
 
         config.exposeIdsFor(Game.class);
+        config.exposeIdsFor(Review.class);
+
 
         disableHttpMethods(Game.class, config, theUnsupportedActions);
+        disableHttpMethods(Review.class, config, theUnsupportedActions);
 
         /* Configure CORS Mapping */
         String theAllowedOrigins = "http://localhost:3000";
@@ -29,9 +33,9 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
                 .allowedOrigins(theAllowedOrigins);
     }
 
-    private void disableHttpMethods(Class<Game> gameClass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
+    private void disableHttpMethods(Class theclass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
         config.getExposureConfiguration()
-                .forDomainType(gameClass)
+                .forDomainType(theclass)
                 .withItemExposure((metdata, httpMethods) ->
                         httpMethods.disable(theUnsupportedActions))
                 .withCollectionExposure((metdata, httpMethods) ->
