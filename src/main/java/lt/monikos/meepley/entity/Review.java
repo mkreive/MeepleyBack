@@ -18,6 +18,9 @@ public class Review {
     @Column(name = "user_email")
     private String userEmail;
 
+    @Column(name = "user_name")
+    private String userName;
+
     @Column(name = "date")
     @CreationTimestamp
     private Date date;

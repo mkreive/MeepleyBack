@@ -16,20 +16,5 @@ public class GameController {
         this.gameService = gameService;
     }
 
-//    @GetMapping("/findByTitle")
-//    public List<Game> findByTitle(String gameTitle) {
-//        return gameService.getByTitle(gameTitle);
-//    }
-//
-//    @GetMapping("/findByCategory")
-//    public List<Game> findByCategory(String categories) {
-//        return gameService.getByCategory(categories);
-//    }
-//
-//    @GetMapping("/findByComplexity")
-//    public List<Game> findByComplexity(String complexities) {
-//        return gameService.getByComplexity(complexities);
-//    }
-
 
 }
