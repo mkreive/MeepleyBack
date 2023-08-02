@@ -50,4 +50,15 @@ public class GameService {
         return game.get();
     }
 
+    public Boolean checkoutGameByUser(String userEmail, Long bookId) {
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndGameId(userEmail, bookId);
+        return validateCheckout != null;
+    }
+
+    public int currentLoansCount(String userEmail) {
+        return checkoutRepository.findGamesByUserEmail(userEmail).size();
+    }
+
+
+
 }
