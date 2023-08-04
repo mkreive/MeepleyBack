@@ -13,17 +13,18 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name = "user_name")
-    private String userName;
-
     @Column(name = "date")
     @CreationTimestamp
     private Date date;
+
+    @Column(name = "rating")
+    private double rating;
 
     @Column(name = "game_id")
     private Long gameId;

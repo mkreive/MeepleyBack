@@ -9,4 +9,8 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByGameId(@RequestParam("game_id") Long gameId);
+
+    Review findByUserEmailAndGameId(String userEmail, Long bookId);
+
+
 }
