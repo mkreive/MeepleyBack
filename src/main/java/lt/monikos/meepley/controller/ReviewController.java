@@ -23,10 +23,10 @@ public class ReviewController {
                                     @RequestParam Long gameId) throws Exception {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
 
-        if (extracted.getEmail() == null) {
+        if (extracted.getSub() == null) {
             throw new Exception("User email is missing");
         }
-        return reviewService.userReviewListed(extracted.getEmail(), gameId);
+        return reviewService.userReviewListed(extracted.getSub(), gameId);
     }
 
 
@@ -34,9 +34,12 @@ public class ReviewController {
     public void postReview(@RequestHeader(value = "Authorization") String token,
                            @RequestBody ReviewRequest reviewRequest) throws Exception  {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-        if(extracted.getEmail() == null) {
+
+        if(extracted.getSub() == null) {
             throw new Exception("User email is missing");
         }
-        reviewService.postReview(extracted.getEmail() , reviewRequest);
+
+        System.out.println(extracted.getSub());
+        reviewService.postReview(extracted.getSub() , reviewRequest);
     }
 }
