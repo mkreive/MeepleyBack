@@ -1,6 +1,7 @@
 package lt.monikos.meepley.controller;
 
 import lt.monikos.meepley.entity.Game;
+import lt.monikos.meepley.entity.Token;
 import lt.monikos.meepley.service.GameService;
 import lt.monikos.meepley.utils.ExtractJWT;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +22,18 @@ public class GameController {
     @GetMapping("/secure/ischeckedout/byuser")
     public Boolean checkoutGameByUser(@RequestHeader(value = "Authorization") String token,
                                       @RequestParam Long gameId) {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        return gameService.checkoutGameByUser(userEmail, gameId);
+        Token extracted = ExtractJWT.payloadJWTExtraction(token);
+        return gameService.checkoutGameByUser(extracted.getEmail(), gameId);
     }
     @GetMapping("/secure/currentloans/count")
     public int currentLoansCount(@RequestHeader(value = "Authorization") String token) {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        return gameService.currentLoansCount(userEmail);
+        Token extracted = ExtractJWT.payloadJWTExtraction(token);
+        return gameService.currentLoansCount(extracted.getEmail());
     }
     @PutMapping("/secure/checkout")
     public Game checkoutGame(@RequestHeader(value = "Authorization") String token, @RequestParam Long gameId) throws Exception {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        return gameService.checkoutGame(userEmail, gameId);
+        Token extracted = ExtractJWT.payloadJWTExtraction(token);
+        return gameService.checkoutGame(extracted.getEmail(), gameId);
     }
 
 

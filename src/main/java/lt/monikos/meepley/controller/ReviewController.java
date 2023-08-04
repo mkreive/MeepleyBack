@@ -1,5 +1,6 @@
 package lt.monikos.meepley.controller;
 
+import lt.monikos.meepley.entity.Token;
 import lt.monikos.meepley.requestModels.ReviewRequest;
 import lt.monikos.meepley.service.ReviewService;
 import lt.monikos.meepley.utils.ExtractJWT;
@@ -20,22 +21,22 @@ public class ReviewController {
     @GetMapping("/secure/user/game")
     public Boolean reviewGameByUser(@RequestHeader(value="Authorization") String token,
                                     @RequestParam Long gameId) throws Exception {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"email\"");
+        Token extracted = ExtractJWT.payloadJWTExtraction(token);
 
-        if (userEmail == null) {
+        if (extracted.getEmail() == null) {
             throw new Exception("User email is missing");
         }
-        return reviewService.userReviewListed(userEmail, gameId);
+        return reviewService.userReviewListed(extracted.getEmail(), gameId);
     }
 
 
     @PostMapping("/secure")
     public void postReview(@RequestHeader(value = "Authorization") String token,
                            @RequestBody ReviewRequest reviewRequest) throws Exception  {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        if(userEmail == null) {
+        Token extracted = ExtractJWT.payloadJWTExtraction(token);
+        if(extracted.getEmail() == null) {
             throw new Exception("User email is missing");
         }
-        reviewService.postReview(userEmail, reviewRequest);
+        reviewService.postReview(extracted.getEmail() , reviewRequest);
     }
 }

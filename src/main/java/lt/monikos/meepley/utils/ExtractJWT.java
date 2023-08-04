@@ -1,43 +1,33 @@
 package lt.monikos.meepley.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.monikos.meepley.entity.Token;
+
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExtractJWT {
 
-    public static String payloadJWTExtraction(String token, String extraction) {
-
-        token.replace("Bearer ", "");
+    public static Token payloadJWTExtraction(String token) {
 
         String[] chunks = token.split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
 
         String payload = new String(decoder.decode(chunks[1]));
 
-        System.out.println(payload);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        String[] entries = payload.split(",");
-        Map<String, String> map = new HashMap<>();
+        Token extraction = null;
 
-        for (String entry : entries) {
-            String[] keyValue = entry.split(":");
-            if (keyValue[0].equals(extraction)) {
-
-                int remove = 1;
-                if (keyValue[1].endsWith("}")) {
-                    remove = 2;
-                }
-                keyValue[1] = keyValue[1].substring(0, keyValue[1].length() - remove);
-                keyValue[1] = keyValue[1].substring(1);
-
-                map.put(keyValue[0], keyValue[1]);
-            }
+        try {
+            extraction = objectMapper.readValue(payload, Token.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
         }
-        if (map.containsKey(extraction)) {
-            return map.get(extraction);
-        }
-        return null;
+        return extraction;
     }
 
 }
