@@ -4,12 +4,18 @@ import lt.monikos.meepley.entity.Checkout;
 import lt.monikos.meepley.entity.Game;
 import lt.monikos.meepley.repository.CheckoutRepository;
 import lt.monikos.meepley.repository.GameRepository;
+import lt.monikos.meepley.responseModels.AccountReservations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
@@ -57,6 +63,75 @@ public class GameService {
 
     public int currentLoansCount(String userEmail) {
         return checkoutRepository.findGamesByUserEmail(userEmail).size();
+    }
+
+    public List<AccountReservations> currentReservations(String userEmail) throws Exception {
+
+        List<AccountReservations> accountReservationsResponse = new ArrayList<>();
+
+        List<Checkout> checkoutList = checkoutRepository.findGamesByUserEmail(userEmail);
+        List<Long> gameIdList = new ArrayList<>();
+
+        for (Checkout i: checkoutList) {
+            gameIdList.add(i.getGameId());
+        }
+
+        List<Game> games = gameRepository.findGamesByGameIds(gameIdList);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (Game game : games) {
+            Optional<Checkout> checkout = checkoutList.stream()
+                    .filter(x -> x.getGameId() == game.getId()).findFirst();
+
+            if (checkout.isPresent()) {
+
+                Date d1 = sdf.parse(checkout.get().getReturnDate());
+                Date d2 = sdf.parse(LocalDate.now().toString());
+
+                TimeUnit time = TimeUnit.DAYS;
+
+                long difference_In_Time = time.convert(d1.getTime() - d2.getTime(),
+                        TimeUnit.MILLISECONDS);
+
+                accountReservationsResponse.add(new AccountReservations(game, (int) difference_In_Time));
+            }
+        }
+        return accountReservationsResponse;
+    }
+
+    public void returnGame (String userEmail, Long gameId) throws Exception {
+
+        Optional<Game> game = gameRepository.findById(gameId);
+
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndGameId(userEmail, gameId);
+
+        if (!game.isPresent() || validateCheckout == null) {
+            throw new Exception("Game does not exist or not checked out by user");
+        }
+
+        game.get().setCopiesAvailable(game.get().getCopiesAvailable() + 1);
+
+        gameRepository.save(game.get());
+        checkoutRepository.deleteById(validateCheckout.getId());
+
+//        History history = new History(
+//                userEmail,
+//                validateCheckout.getCheckoutDate(),
+//                LocalDate.now().toString(),
+//                game.get().getTitle(),
+//                game.get().getDesigner(),
+//                game.get().getPublisher(),
+//                game.get().getIntro(),
+//                game.get().getDescription(),
+//                game.get().getCategory(),
+//                game.get().getComplexity(),
+//                game.get().getPlayers(),
+//                game.get().getPlayingTime(),
+//                game.get().getImg()
+//
+//        );
+//        historyRepository.save(history);
     }
 
 

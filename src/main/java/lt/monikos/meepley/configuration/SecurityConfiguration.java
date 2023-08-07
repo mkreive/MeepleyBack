@@ -19,6 +19,7 @@ public class SecurityConfiguration {
                         configurer
                                 .requestMatchers("/api/games/secure/**",
                                         "/api/reviews/secure/**",
+                                        "/api/account/**",
                                         "/api/messages/secure/**",
                                         "/api/admin/secure/**")
                                 .authenticated()
