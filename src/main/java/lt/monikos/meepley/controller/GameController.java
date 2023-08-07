@@ -47,6 +47,13 @@ public class GameController {
         gameService.returnGame(extracted.getEmail(), gameId);
     }
 
+    @PutMapping("/secure/renew/loan")
+    public void renewLoan(@RequestHeader(value = "Authorization") String token, @RequestParam Long gameId) throws Exception {
+        Token extracted = ExtractJWT.payloadJWTExtraction(token);
+        gameService.renewLoan(extracted.getEmail(), gameId);
+    }
+
+
     @PutMapping("/secure/checkout")
     public Game checkoutGame(@RequestHeader(value = "Authorization") String token, @RequestParam Long gameId) throws Exception {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);

@@ -2,8 +2,10 @@ package lt.monikos.meepley.service;
 
 import lt.monikos.meepley.entity.Checkout;
 import lt.monikos.meepley.entity.Game;
+import lt.monikos.meepley.entity.History;
 import lt.monikos.meepley.repository.CheckoutRepository;
 import lt.monikos.meepley.repository.GameRepository;
+import lt.monikos.meepley.repository.HistoryRepository;
 import lt.monikos.meepley.responseModels.AccountReservations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +27,13 @@ public class GameService {
 
     private CheckoutRepository checkoutRepository;
 
+    private HistoryRepository historyRepository;
+
     @Autowired
-    public GameService(GameRepository gameRepository, CheckoutRepository checkoutRepository) {
+    public GameService(GameRepository gameRepository, CheckoutRepository checkoutRepository, HistoryRepository historyRepository) {
         this.gameRepository = gameRepository;
         this.checkoutRepository = checkoutRepository;
+        this.historyRepository = historyRepository;
     }
 
     public Game checkoutGame (String userEmail, Long gameId) throws Exception {
@@ -107,7 +112,7 @@ public class GameService {
         Checkout validateCheckout = checkoutRepository.findByUserEmailAndGameId(userEmail, gameId);
 
         if (!game.isPresent() || validateCheckout == null) {
-            throw new Exception("Game does not exist or not checked out by user");
+            throw new Exception("Game does not exist or not reserved by user");
         }
 
         game.get().setCopiesAvailable(game.get().getCopiesAvailable() + 1);
@@ -115,24 +120,45 @@ public class GameService {
         gameRepository.save(game.get());
         checkoutRepository.deleteById(validateCheckout.getId());
 
-//        History history = new History(
-//                userEmail,
-//                validateCheckout.getCheckoutDate(),
-//                LocalDate.now().toString(),
-//                game.get().getTitle(),
-//                game.get().getDesigner(),
-//                game.get().getPublisher(),
-//                game.get().getIntro(),
-//                game.get().getDescription(),
-//                game.get().getCategory(),
-//                game.get().getComplexity(),
-//                game.get().getPlayers(),
-//                game.get().getPlayingTime(),
-//                game.get().getImg()
-//
-//        );
-//        historyRepository.save(history);
+        History history = new History(
+                userEmail,
+                validateCheckout.getCheckoutDate(),
+                LocalDate.now().toString(),
+                game.get().getTitle(),
+                game.get().getDesigner(),
+                game.get().getPublisher(),
+                game.get().getIntro(),
+                game.get().getDescription(),
+                game.get().getCategory(),
+                game.get().getComplexity(),
+                game.get().getPlayers(),
+                game.get().getPlayingTime(),
+                game.get().getImg()
+
+        );
+        historyRepository.save(history);
     }
+
+    public void renewLoan(String userEmail, Long gameId) throws Exception {
+
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndGameId(userEmail, gameId);
+
+        if (validateCheckout == null) {
+            throw new Exception("Game does not exist or not reserved by user");
+        }
+
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date d1 = sdFormat.parse(validateCheckout.getReturnDate());
+        Date d2 = sdFormat.parse(LocalDate.now().toString());
+
+        if (d1.compareTo(d2) > 0 || d1.compareTo(d2) == 0) {
+            validateCheckout.setReturnDate(LocalDate.now().plusDays(7).toString());
+            checkoutRepository.save(validateCheckout);
+        }
+    }
+
+
 
 
 
