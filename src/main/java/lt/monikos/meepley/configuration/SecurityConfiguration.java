@@ -21,6 +21,7 @@ public class SecurityConfiguration {
                                         "/api/reviews/secure/**",
                                         "/api/account/**",
                                         "/api/messages/secure/**",
+                                        "/api/histories/**",
                                         "/api/admin/secure/**")
                                 .authenticated()
                                 .anyRequest().permitAll())

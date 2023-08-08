@@ -34,9 +34,6 @@ public class History {
     @Column(name = "intro")
     private String intro;
 
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "category")
     private String category;
 
@@ -55,7 +52,7 @@ public class History {
     public History(){}
 
     public History(String userEmail, String checkoutDate, String returnedDate, String title,
-                   String designer, String publisher, String intro, String description,
+                   String designer, String publisher, String intro,
                    String category, String complexity, String players, String playingTime,
                    byte[] img) {
         this.userEmail = userEmail;
@@ -65,7 +62,6 @@ public class History {
         this.designer = designer;
         this.publisher = publisher;
         this.intro = intro;
-        this.description = description;
         this.category=category;
         this.complexity = complexity;
         this.players = players;

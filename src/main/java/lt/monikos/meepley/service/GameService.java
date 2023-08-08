@@ -128,7 +128,6 @@ public class GameService {
                 game.get().getDesigner(),
                 game.get().getPublisher(),
                 game.get().getIntro(),
-                game.get().getDescription(),
                 game.get().getCategory(),
                 game.get().getComplexity(),
                 game.get().getPlayers(),

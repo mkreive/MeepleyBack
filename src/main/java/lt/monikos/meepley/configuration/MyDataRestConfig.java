@@ -1,6 +1,7 @@
 package lt.monikos.meepley.configuration;
 
 import lt.monikos.meepley.entity.Game;
+import lt.monikos.meepley.entity.Message;
 import lt.monikos.meepley.entity.Review;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -22,10 +23,12 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 
         config.exposeIdsFor(Game.class);
         config.exposeIdsFor(Review.class);
+        config.exposeIdsFor(Message.class);
 
 
         disableHttpMethods(Game.class, config, theUnsupportedActions);
         disableHttpMethods(Review.class, config, theUnsupportedActions);
+        disableHttpMethods(Message.class, config, theUnsupportedActions);
 
         /* Configure CORS Mapping */
         String theAllowedOrigins = "http://localhost:3000";
