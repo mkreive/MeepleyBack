@@ -2,6 +2,7 @@ package lt.monikos.meepley.controller;
 
 import lt.monikos.meepley.entity.Message;
 import lt.monikos.meepley.entity.Token;
+import lt.monikos.meepley.requestModels.AdminQuestionRequest;
 import lt.monikos.meepley.service.MessagesService;
 import lt.monikos.meepley.utils.ExtractJWT;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,14 @@ public class MessagesController {
         messagesService.postMessage(messageRequest, extracted.getSub());
     }
 
-//    @PutMapping("/secure/admin/message")
-//    public void putMessage(@RequestHeader(value="Authorization") String token,
-//                           @RequestBody AdminQuestionRequest adminQuestionRequest) throws Exception {
-//        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-//        String admin = ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
-//        if (admin == null || !admin.equals("admin")) {
-//            throw new Exception("Administration page only.");
-//        }
-//        messagesService.putMessage(adminQuestionRequest, userEmail);
-//    }
+    @PutMapping("/secure/admin/message")
+    public void putMessage(@RequestHeader(value="Authorization") String token,
+                           @RequestBody AdminQuestionRequest adminQuestionRequest) throws Exception {
+        Token extracted = ExtractJWT.payloadJWTExtraction(token);
+        String admin = extracted.getUserType();
+        if (admin == null || !admin.equals("admin")) {
+            throw new Exception("Administration page only.");
+        }
+        messagesService.putMessage(adminQuestionRequest, extracted.getSub());
+    }
 }

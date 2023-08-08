@@ -11,4 +11,6 @@ public class Token {
 
     private String email;
 
+    private String userType;
+
 }

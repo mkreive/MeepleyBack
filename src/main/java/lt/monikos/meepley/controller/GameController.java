@@ -26,38 +26,38 @@ public class GameController {
     public Boolean checkoutGameByUser(@RequestHeader(value = "Authorization") String token,
                                       @RequestParam Long gameId) {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-        return gameService.checkoutGameByUser(extracted.getEmail(), gameId);
+        return gameService.checkoutGameByUser((extracted.getEmail() == null) ? extracted.getSub() : extracted.getEmail(), gameId);
     }
 
     @GetMapping("/secure/currentloans")
     public List<AccountReservations> currentReservations(@RequestHeader(value = "Authorization") String token) throws Exception {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-        return gameService.currentReservations(extracted.getEmail());
+        return gameService.currentReservations(extracted.getSub());
     }
 
     @GetMapping("/secure/currentloans/count")
     public int currentLoansCount(@RequestHeader(value = "Authorization") String token) {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-        return gameService.currentLoansCount(extracted.getEmail());
+        return gameService.currentLoansCount((extracted.getEmail() == null) ? extracted.getSub() : extracted.getEmail());
     }
 
     @PutMapping("/secure/return")
     public void returnGame(@RequestHeader(value = "Authorization") String token, @RequestParam Long gameId) throws Exception {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-        gameService.returnGame(extracted.getEmail(), gameId);
+        gameService.returnGame((extracted.getEmail() == null) ? extracted.getSub() : extracted.getEmail(), gameId);
     }
 
     @PutMapping("/secure/renew/loan")
     public void renewLoan(@RequestHeader(value = "Authorization") String token, @RequestParam Long gameId) throws Exception {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-        gameService.renewLoan(extracted.getEmail(), gameId);
+        gameService.renewLoan((extracted.getEmail() == null) ? extracted.getSub() : extracted.getEmail(), gameId);
     }
 
 
     @PutMapping("/secure/checkout")
     public Game checkoutGame(@RequestHeader(value = "Authorization") String token, @RequestParam Long gameId) throws Exception {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-        return gameService.checkoutGame(extracted.getEmail(), gameId);
+        return gameService.checkoutGame((extracted.getEmail() == null) ? extracted.getSub() : extracted.getEmail() , gameId);
     }
 
 

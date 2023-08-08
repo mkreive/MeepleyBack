@@ -9,4 +9,6 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findByUserEmail(@RequestParam("user_email") String userEmail);
+
+    List<Message> findByClosed(@RequestParam("closed") boolean closed);
 }
