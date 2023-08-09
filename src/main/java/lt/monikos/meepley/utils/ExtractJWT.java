@@ -16,8 +16,6 @@ public class ExtractJWT {
 
         String payload = new String(decoder.decode(chunks[1]));
 
-        System.out.println(payload);
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
