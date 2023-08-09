@@ -34,12 +34,8 @@ public class ReviewController {
     public void postReview(@RequestHeader(value = "Authorization") String token,
                            @RequestBody ReviewRequest reviewRequest) throws Exception  {
         Token extracted = ExtractJWT.payloadJWTExtraction(token);
-
         if(extracted.getSub() == null) {
             throw new Exception("User email is missing");
         }
-
-        System.out.println(extracted.getSub());
-        reviewService.postReview(extracted.getSub() , reviewRequest);
     }
 }

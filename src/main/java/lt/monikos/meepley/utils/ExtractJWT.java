@@ -28,7 +28,6 @@ public class ExtractJWT {
             return null;
         }
 
-        System.out.println(extraction);
         return extraction;
     }
 
