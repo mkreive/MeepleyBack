@@ -37,6 +37,9 @@ public class Game {
     @Column(name = "category")
     private String category;
 
+    @Column(name = "complexity")
+    private String complexity;
+
     @Column(name = "players")
     private String players;
 
