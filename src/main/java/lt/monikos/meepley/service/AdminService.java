@@ -1,7 +1,9 @@
 package lt.monikos.meepley.service;
 
 import lt.monikos.meepley.entity.Game;
+import lt.monikos.meepley.repository.CheckoutRepository;
 import lt.monikos.meepley.repository.GameRepository;
+import lt.monikos.meepley.repository.ReviewRepository;
 import lt.monikos.meepley.requestModels.AddGameRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,15 @@ public class AdminService {
 
     private GameRepository gameRepository;
 
+    private CheckoutRepository checkoutRepository;
+
+    private ReviewRepository reviewRepository;
+
     @Autowired
-    public AdminService(GameRepository gameRepository) {
+    public AdminService(GameRepository gameRepository, CheckoutRepository checkoutRepository, ReviewRepository reviewRepository) {
         this.gameRepository = gameRepository;
+        this.checkoutRepository = checkoutRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public void postGame(AddGameRequest addGameRequest) {
@@ -75,8 +83,7 @@ public class AdminService {
         }
 
         gameRepository.delete(game.get());
-        //        checkoutRepository.deleteAllByBookId(bookId);
-//        reviewRepository.deleteAllByBookId(bookId);
-
+        checkoutRepository.deleteAllByGameId(gameId);
+        reviewRepository.deleteAllByGameId(gameId);
     }
 }

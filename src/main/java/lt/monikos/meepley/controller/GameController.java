@@ -21,7 +21,6 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    // Game loans by user
     @GetMapping("/secure/ischeckedout/byuser")
     public Boolean checkoutGameByUser(@RequestHeader(value = "Authorization") String token,
                                       @RequestParam Long gameId) {

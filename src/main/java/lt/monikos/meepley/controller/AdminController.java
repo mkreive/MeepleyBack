@@ -1,7 +1,6 @@
 package lt.monikos.meepley.controller;
 
 import lt.monikos.meepley.entity.Token;
-import lt.monikos.meepley.repository.GameRepository;
 import lt.monikos.meepley.requestModels.AddGameRequest;
 import lt.monikos.meepley.service.AdminService;
 import lt.monikos.meepley.utils.ExtractJWT;
@@ -15,7 +14,7 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
-    public AdminController(AdminService adminService, GameRepository gameRepository) {
+    public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 

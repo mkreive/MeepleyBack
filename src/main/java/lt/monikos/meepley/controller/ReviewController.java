@@ -37,5 +37,6 @@ public class ReviewController {
         if(extracted.getSub() == null) {
             throw new Exception("User email is missing");
         }
+        reviewService.postReview(extracted.getSub(), reviewRequest);
     }
 }
