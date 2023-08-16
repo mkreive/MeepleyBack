@@ -46,6 +46,28 @@ public class AdminService {
         gameRepository.save(game);
     }
 
+    public void editGame(Long gameId, AddGameRequest addGameRequest) throws Exception {
+        Optional<Game> game = gameRepository.findById(gameId);
+        if (!game.isPresent()) {
+            throw new Exception("Game not found");
+        }
+        game.get().setId(game.get().getId());
+        game.get().setTitle(addGameRequest.getTitle());
+        game.get().setDesigner(addGameRequest.getDesigner());
+        game.get().setPublisher(addGameRequest.getPublisher());
+        game.get().setIntro(addGameRequest.getIntro());
+        game.get().setDescription(addGameRequest.getDescription());
+        game.get().setCopies(addGameRequest.getCopies());
+        game.get().setCopiesAvailable(addGameRequest.getCopies());
+        game.get().setCategory(addGameRequest.getCategory());
+        game.get().setComplexity(addGameRequest.getComplexity());
+        game.get().setPlayers(addGameRequest.getPlayers());
+        game.get().setPlayingTime(addGameRequest.getPlayingTime());
+        game.get().setImg(game.get().getImg());
+        gameRepository.save(game.get());
+
+    }
+
     public void increaseGameQuantity(Long gameId) throws Exception {
 
         Optional<Game> game = gameRepository.findById(gameId);
@@ -86,4 +108,6 @@ public class AdminService {
         checkoutRepository.deleteAllByGameId(gameId);
         reviewRepository.deleteAllByGameId(gameId);
     }
+
+
 }

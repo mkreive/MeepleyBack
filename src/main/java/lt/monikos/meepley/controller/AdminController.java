@@ -29,6 +29,18 @@ public class AdminController {
         adminService.postGame(addGameRequest);
     }
 
+    @PutMapping("/secure/edit/game")
+    public void editGame(@RequestHeader(value="Authorization") String token,
+                         @RequestParam Long gameId, @RequestBody AddGameRequest addGameRequest) throws Exception {
+        Token extraction = ExtractJWT.payloadJWTExtraction(token);
+        String admin = extraction.getUserType();
+        if (admin == null || !admin.equals("admin")) {
+            throw new Exception("Administration page only");
+        }
+
+        adminService.editGame(gameId, addGameRequest);
+    }
+
     @PutMapping("/secure/increase/game/quantity")
     public void increaseGameQuantity(@RequestHeader(value="Authorization") String token,
                                      @RequestParam Long gameId) throws Exception {
@@ -39,6 +51,8 @@ public class AdminController {
         }
         adminService.increaseGameQuantity(gameId);
     }
+
+
 
     @PutMapping("/secure/decrease/game/quantity")
     public void decreaseGameQuantity(@RequestHeader(value="Authorization") String token,
